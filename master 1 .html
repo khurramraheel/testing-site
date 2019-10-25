@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    
+
+
+
+
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        #startBtn:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        #startBtn, #gameOVerIcon {
+            width: 150px;
+            height: 100px;
+            position: absolute;
+            left: calc(50% - 50px);
+            top: 50vh;
+        }
+
+        #appContainer {
+
+            width: 1280px;
+            border: 5px solid red;
+
+        }
+
+        #splashScreen {
+            position: relative;
+        }
+
+        #back-screen {
+            width: 100%;
+        }
+
+        #gameScreen {
+            position: relative;
+        }
+
+        .stats {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 200px;
+        }
+
+        #gameScore {
+            top: 15%;
+        }
+
+        .stats img {
+            width: 100%;
+        }
+
+        .stats strong {
+            font-size: 3em;
+            position: relative;
+            top: -13px;
+            left: 70px;
+        }
+
+        .baloon {
+            width: 100px;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <section id="appContainer">
+
+
+        <div id="splashScreen">
+
+            <img src="images/background.jpg" />
+            <img id="startBtn" src="images/start-btn.png" alt="">
+
+        </div>
+
+        <div id="gameScreen" style="display:none">
+
+            <img id="back-screen" src="images/game-screen.jpg" alt="">
+
+            <div id="gameChances" class="stats">
+                <img src="images/chances.png" alt="">
+                <strong id="chancesBox">5</strong>
+            </div>
+
+            <div id="gameScore" class="stats">
+                <img src="images/score.png" alt="">
+                <strong id="scoreBox">0</strong>
+            </div>
+
+        </div>
+
+        <div id="gameOverScreen" style="display:none">
+                <img id="back-screen" src="images/game-screen.jpg" alt="">
+                <img id="gameOVerIcon" src="images/game-over.png" />
+        </div>
+
+    </section>
+
+
+    <script>
+
+        startBtn.onclick = startGame;
+
+        let speed = 1500;
+        let score = 0;
+        let gameStarted = false;
+     let gameKey;
+        
+
+        function startGame() {
+
+            gameStarted = true;
+            splashScreen.style.display = "none";
+            gameScreen.style.display = "";
+
+
+           gameKey = setInterval(() => {
+
+                let baloon = document.createElement('img');
+                baloon.src = "./images/baloon-" + (Math.floor(Math.random() * 3)) + ".png";
+                baloon.setAttribute("class", "baloon")
+                baloon.style.left = (Math.random() * 1290) + 'px';
+
+                gameScreen.appendChild(baloon);
+
+                baloon.onclick = () => {
+
+                    score++;
+                    scoreBox.innerText = score;
+
+                    baloon.remove();
+
+                }
+
+                setInterval(() => {
+
+
+                    baloon.style.top = (baloon.offsetTop - 1) + 'px';
+
+                    if ((baloon.offsetTop + baloon.offsetHeight) < 0) {
+                        baloon.remove();
+
+                        if (chancesBox.innerText > 1) {
+                            chancesBox.innerText = chancesBox.innerText - 1;
+                        } else {
+                            gameScreen.style.display = "none";
+                            gameOverScreen.style.display = "";
+                            clearInterval(gameKey);
+                        }
+                    }
+
+
+                }, 0 + Math.random() * 20);
+
+                // console.log(baloon);
+
+            }, speed);
+
+
+        }
+
+    </script>
+
+</body>
+
+</html>
